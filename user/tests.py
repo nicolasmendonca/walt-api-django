@@ -9,7 +9,8 @@ TOKEN_URL = reverse('user:token')
 ME_URL = reverse('user:me')
 
 def create_user(**params):
-    return get_user_model().objects.create(**params)
+    # get_user_model() returns the CustomUser model
+    return get_user_model().objects.create_user(**params)
 
 class PublicUsersApiTest(TestCase):
     """Test the users API (Public)"""
@@ -67,9 +68,13 @@ class PublicUsersApiTest(TestCase):
     def test_create_token_for_user(self):
         """Test that a token is created for the user"""
         payload = {'email': 'test@email.com', 'password': 'testpass', 'name': 'Mendo'}
+        # creates the user successfully
         create_user(**payload)
 
-        res = self.client.post(TOKEN_URL, payload)
+        res = self.client.post(TOKEN_URL, {
+            'email': payload['email'],
+            'password': payload['password']
+        })
 
         self.assertIn('token', res.data)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
