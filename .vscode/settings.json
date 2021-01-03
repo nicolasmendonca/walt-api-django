@@ -2,5 +2,14 @@
   "python.pythonPath": ".env/bin/python",
   "python.venvPath": "${workspaceFolder}/.env",
   "editor.tabSize": 4,
-  "editor.detectIndentation": true
+  "editor.detectIndentation": true,
+  "sqltools.useNodeRuntime": true,
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "name": "waltapi",
+      "database": "${workspaceFolder:walt-api}/db.sqlite3"
+    }
+  ]
 }
