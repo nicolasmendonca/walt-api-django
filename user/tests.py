@@ -1,16 +1,13 @@
 from django.test import TestCase
-from django.contrib.auth import get_user_model
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 from rest_framework import status
+from test_utils.users import create_user
 
 CREATE_USER_URL = reverse('user:create')
 TOKEN_URL = reverse('user:token')
 ME_URL = reverse('user:me')
-
-def create_user(**params):
-    # get_user_model() returns the CustomUser model
-    return get_user_model().objects.create_user(**params)
 
 class PublicUsersApiTest(TestCase):
     """Test the users API (Public)"""
@@ -112,11 +109,7 @@ class PrivateUserApiTests(TestCase):
     """Test API requests that require authentication"""
 
     def setUp(self):
-        self.user = create_user(
-            email='email@test.com',
-            password='testpass',
-            name='name'
-        )
+        self.user = create_user()
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
 

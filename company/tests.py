@@ -4,7 +4,7 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
-from user.tests import create_user
+from test_utils.users import create_user
 from django.test import TestCase
 from test_utils.files import get_image_for_upload
 
@@ -34,11 +34,7 @@ class PublicCompanyAPITests(TestCase):
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class PrivateCompanyAPITests(TestCase):
     def setUp(self):
-        self.user = create_user(
-            email='email@test.com',
-            password='testpass',
-            name='name'
-        )
+        self.user = create_user()
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
     
