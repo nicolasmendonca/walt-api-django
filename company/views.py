@@ -1,7 +1,6 @@
-from rest_framework import permissions
 from rest_framework import generics
-from .models import COMPANY_ADMIN, CompanyUser
-from .serializers import CompanySerializer, CompanyUserSerializer
+from .relationships import COMPANY_ADMIN, CompanyUser
+from .serializers import CompanySerializer, CreateEmployeeSerializer
 
 class CreateCompanyView(generics.CreateAPIView):
     serializer_class = CompanySerializer
@@ -10,3 +9,6 @@ class CreateCompanyView(generics.CreateAPIView):
         company = serializer.save()
         CompanyUser.objects.create(company=company, user=self.request.user, role=COMPANY_ADMIN)
         return company
+
+class CreateEmployee(generics.CreateAPIView):
+    serializer_class = CreateEmployeeSerializer

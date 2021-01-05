@@ -36,11 +36,12 @@ class CustomUserManager(BaseUserManager):
             raise ValueError(_('Superuser must have is_superuser=True.'))
         return self.create_user(email, password, name, **extra_fields)
 
-
+# users model
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
     name = models.CharField(_('name'), max_length=255)
+    companies = models.ManyToManyField('company.Company', through='company.CompanyUser')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
