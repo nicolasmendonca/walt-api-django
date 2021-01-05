@@ -1,3 +1,4 @@
+from company.models import CompanyUser
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
@@ -36,7 +37,7 @@ class CustomUserManager(BaseUserManager):
             raise ValueError(_('Superuser must have is_superuser=True.'))
         return self.create_user(email, password, name, **extra_fields)
 
-
+# users model
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)

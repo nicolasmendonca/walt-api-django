@@ -1,9 +1,10 @@
 import shutil
 import tempfile
+from test_utils.company import create_company
 from .models import Company, CompanyUser, COMPANY_ADMIN
 from django.test import TestCase, override_settings
 from django.urls import reverse
-from rest_framework.test import APIClient
+from rest_framework.test import APIClient, APITestCase
 from rest_framework import status
 from test_utils.users import create_user
 from django.test import TestCase
@@ -11,6 +12,7 @@ from test_utils.files import get_image_for_upload
 
 MEDIA_ROOT = tempfile.mkdtemp()
 CREATE_COMPANY_URL = reverse('company:create')
+CREATE_EMPLOYEE_URL = reverse('company:employee-create')
 
 def generate_successful_payload():
     return {
@@ -64,3 +66,18 @@ class PrivateCompanyAPITests(TestCase):
         created_companyuser = CompanyUser.objects.get(company=created_company, user=self.user)
         self.assertIsInstance(created_companyuser, CompanyUser)
         self.assertEqual(created_companyuser.role, COMPANY_ADMIN)
+
+class PrivateCreateEmployeeAPITests(APITestCase):
+    def setUp(self):
+        (self.user, self.company, self.company_user) = create_company(admin=create_user())
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+
+    def test_create_employee_success(self):
+        payload = {
+            'company_id': self.company.id,
+            'email': 'employee@test.com',
+            'name': 'Employee 1'
+        }
+        res = self.client.post(CREATE_EMPLOYEE_URL, payload)
+        self.assertEqual(res.data['name'], payload['name'])

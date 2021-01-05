@@ -13,7 +13,7 @@ ROLES = (
     (COMPANY_EMPLOYEE, _('company employee'))
 )
 
-
+# company model
 class Company(models.Model):
     name = models.CharField(_('name'), max_length=255)
     logo = models.ImageField(_('logo'), upload_to='uploads/logos')
@@ -24,6 +24,7 @@ class Company(models.Model):
         return self.name
 
 
+# relationship model
 class CompanyUser(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
