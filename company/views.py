@@ -1,6 +1,6 @@
 from rest_framework import generics
-from .models import COMPANY_ADMIN, CompanyUser
-from .serializers import CompanySerializer, CompanyUserSerializer, CreateEmployeeSerializer
+from .relationships import COMPANY_ADMIN, CompanyUser
+from .serializers import CompanySerializer, CreateEmployeeSerializer
 
 class CreateCompanyView(generics.CreateAPIView):
     serializer_class = CompanySerializer

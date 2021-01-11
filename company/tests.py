@@ -1,7 +1,8 @@
 import shutil
 import tempfile
 from test_utils.company import create_company
-from .models import Company, CompanyUser, COMPANY_ADMIN
+from .models import Company
+from .relationships import CompanyUser, COMPANY_ADMIN
 from django.test import TestCase, override_settings
 from django.urls import reverse
 from rest_framework.test import APIClient, APITestCase

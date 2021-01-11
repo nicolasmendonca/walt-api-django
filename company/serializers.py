@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.utils.translation import ugettext_lazy as _
-from .models import Company, CompanyUser, ROLES, COMPANY_ADMIN
+from .models import Company
+from .relationships import CompanyUser, ROLES, COMPANY_ADMIN
 from user.models import CustomUser
 
 class CompanySerializer(serializers.ModelSerializer):

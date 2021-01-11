@@ -41,6 +41,7 @@ class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
     name = models.CharField(_('name'), max_length=255)
+    companies = models.ManyToManyField('company.Company', through='company.CompanyUser')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']

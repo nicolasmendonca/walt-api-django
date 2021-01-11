@@ -1,4 +1,5 @@
-from company.models import Company, CompanyUser, COMPANY_ADMIN
+from company.models import Company
+from company.relationships import CompanyUser, COMPANY_ADMIN
 from .files import get_image_for_upload
 
 def create_company(name='White Canvas', logo=None, admin=None):
