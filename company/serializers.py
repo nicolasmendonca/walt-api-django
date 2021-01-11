@@ -16,7 +16,16 @@ class CompanyUserSerializer(serializers.ModelSerializer):
 
 
 class CreateEmployeeSerializer(serializers.ModelSerializer):
-    company_id = serializers.PrimaryKeyRelatedField() # company_id does not exist on the CustomUser model. this should not work
+    company_id = serializers.PrimaryKeyRelatedField(queryset=Company.objects.all(), write_only=True)
+
+    def create(self, validated_data):
+        company = validated_data.pop('company_id')
+        custom_user = super().create(validated_data)
+        CompanyUser.objects.create(
+            user=custom_user,
+            company=company,
+        )
+        return custom_user
 
     class Meta:
         model = CustomUser

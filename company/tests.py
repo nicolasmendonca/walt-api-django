@@ -12,7 +12,7 @@ from test_utils.files import get_image_for_upload
 
 MEDIA_ROOT = tempfile.mkdtemp()
 CREATE_COMPANY_URL = reverse('company:create')
-CREATE_EMPLOYEE_URL = reverse('company:employee-create')
+CREATE_EMPLOYEE_URL = reverse('company:employee-add')
 
 def generate_successful_payload():
     return {
@@ -67,6 +67,7 @@ class PrivateCompanyAPITests(TestCase):
         self.assertIsInstance(created_companyuser, CompanyUser)
         self.assertEqual(created_companyuser.role, COMPANY_ADMIN)
 
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class PrivateCreateEmployeeAPITests(APITestCase):
     def setUp(self):
         (self.user, self.company, self.company_user) = create_company(admin=create_user())
@@ -80,4 +81,4 @@ class PrivateCreateEmployeeAPITests(APITestCase):
             'name': 'Employee 1'
         }
         res = self.client.post(CREATE_EMPLOYEE_URL, payload)
-        self.assertEqual(res.data['name'], payload['name'])
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
