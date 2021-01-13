@@ -2,7 +2,6 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 import company.relationships
 
-# company model
 class Company(models.Model):
     users = models.ManyToManyField('user.CustomUser', through='company.CompanyUser')
     name = models.CharField(_('name'), max_length=255)

@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework import serializers
 from django.utils.translation import ugettext_lazy as _
 from .models import Company
@@ -19,6 +20,7 @@ class CompanyUserSerializer(serializers.ModelSerializer):
 class CreateEmployeeSerializer(serializers.ModelSerializer):
     company_id = serializers.PrimaryKeyRelatedField(queryset=Company.objects.all(), write_only=True)
 
+    @transaction.atomic
     def create(self, validated_data):
         company = validated_data.pop('company_id')
         custom_user = super().create(validated_data)
