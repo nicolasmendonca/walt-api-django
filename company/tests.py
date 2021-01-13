@@ -17,8 +17,10 @@ def get_create_company_url():
     return reverse('company:create')
 def get_create_employee_url():
     return reverse('company:employee-add')
-def get_companies_list_url(id):
-    return reverse('company:companies', kwargs={'user_id': id})
+def get_companies_list_url(user_id):
+    return reverse('company:user-companies', kwargs={'user_id': user_id})
+def get_company_url(pk):
+    return reverse('company:get', kwargs={'pk': pk})
 
 def generate_successful_payload():
     return {
@@ -124,3 +126,22 @@ class PublicRetrieveCompanyListTest(APITestCase):
     def test_retrieve_company_list_failure(self):
         res = self.client.get(get_companies_list_url(1))
         self.assertEquals(res.status_code, status.HTTP_403_FORBIDDEN)
+
+
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
+class PrivateRetrieveCompanyTest(APITestCase):
+    def setUp(self):
+        (self.user, self.company, self.company_user) = create_company(admin=create_user())
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(MEDIA_ROOT, ignore_errors=True)
+        super().tearDownClass()
+
+    def test_retrieve_company_list_success(self):
+        res = self.client.get(get_company_url(self.company.id))
+        company = CompanySerializer(self.company)
+        self.assertEquals(res.status_code, status.HTTP_200_OK)
+        self.assertEquals(res.data['name'], company.data['name'])

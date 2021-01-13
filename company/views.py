@@ -13,10 +13,10 @@ class CreateCompanyView(generics.CreateAPIView):
         CompanyUser.objects.create(company=company, user=self.request.user, role=COMPANY_ADMIN)
         return company
 
-class CreateEmployee(generics.CreateAPIView):
+class CreateEmployeeView(generics.CreateAPIView):
     serializer_class = CreateEmployeeSerializer
 
-class RetrieveCompaniesForUserList(generics.ListAPIView):
+class RetrieveCompaniesForUserListView(generics.ListAPIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def list(self, request, user_id):
@@ -24,3 +24,7 @@ class RetrieveCompaniesForUserList(generics.ListAPIView):
         queryset = user.companies.all()
         serializer = CompanySerializer(queryset, many=True)
         return Response(serializer.data)
+
+class RetrieveCompanyView(generics.RetrieveAPIView):
+    serializer_class = CompanySerializer
+    queryset = Company.objects.all()
